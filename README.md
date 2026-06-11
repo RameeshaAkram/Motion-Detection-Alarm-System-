@@ -1,103 +1,334 @@
-# Motion Detection Alarm System - User Manual & Setup Guide
+# Motion Detection Alarm System
 
-## 🎯 Quick Start
+A professional Python-based motion detection and alarm system with GUI support, ROI (Region of Interest) selection, real-time monitoring, snapshot capture, and configurable alerts.
 
-### Installation
+![Python](https://img.shields.io/badge/Python-3.7+-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
-1. **Install Python Requirements:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+## 📋 Table of Contents
+- [Features](#features)
+- [System Requirements](#system-requirements)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Project Structure](#project-structure)
+- [Troubleshooting](#troubleshooting)
 
-2. **Run the Application:**
-   ```bash
-   python run.py
-   ```
+## ✨ Features
 
-   OR for CLI mode:
-   ```bash
-   python main.py
-   ```
+- **Real-time Motion Detection** - Advanced frame-differencing algorithm with customizable sensitivity
+- **GUI Application** - Professional PyQt5-based user interface with 5 main tabs
+- **ROI Support** - Define custom Region of Interest for focused motion detection
+- **Snapshot Capture** - Automatically save motion-triggered snapshots with timestamps
+- **Audio Alerts** - Configurable beep sounds with frequency and duration control
+- **Live Statistics** - Real-time FPS, frame count, and motion status monitoring
+- **CLI Mode** - Headless operation for server environments
+- **Cross-Platform** - Works on Windows, macOS, and Linux
 
-### System Requirements
+## 🖥️ System Requirements
 
 - **Python**: 3.7 or higher
 - **RAM**: 512 MB minimum
 - **CPU**: Dual-core processor recommended
 - **Camera**: USB webcam or built-in camera
 - **OS**: Windows, macOS, or Linux
+- **Dependencies**: OpenCV, NumPy, PyQt5, Pillow (see requirements.txt)
 
 ---
 
-## 📊 GUI Application Overview
+## � Installation
 
-The Motion Detection Alarm System GUI provides a professional, user-friendly interface with 5 main tabs:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/RameeshaAkram/Motion-Detection-Alarm-System-.git
+   cd Motion-Detection-Alarm-System-
+   ```
 
-### 1. **📹 Live Feed Tab**
+2. **Create a virtual environment (optional but recommended):**
+   ```bash
+   python -m venv venv
+   # On Windows:
+   venv\Scripts\activate
+   # On macOS/Linux:
+   source venv/bin/activate
+   ```
 
-**Purpose:** Real-time video monitoring with motion detection visualization
+3. **Install Python requirements:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-**Components:**
-- **Video Display Area**: 800x600 px live camera feed
-- **Motion Notifications**: Red "MOTION DETECTED!" text appears when motion is detected
-- **Bounding Boxes**: Green rectangles highlight detected motion regions
-- **Real-time Statistics**:
-  - FPS (Frames Per Second)
-  - Total Frames Processed
-  - Motion Status Indicator
-  - Snapshot Count
+## 🚀 Quick Start
 
-**Controls:**
-- ▶ **Start Monitoring**: Begins motion detection
-- ⏹ **Stop Monitoring**: Stops camera capture and monitoring
-- 📸 **Manual Snapshot**: Captures current frame manually
+### GUI Mode (Recommended)
+```bash
+python run.py
+```
+Launches the professional PyQt5 GUI with 5 feature-rich tabs.
 
-**Motion Detection Algorithm:**
-The system uses frame-by-frame differencing:
-1. Each frame is converted to grayscale and blurred (noise reduction)
-2. Current frame is subtracted from previous frame
-3. Threshold is applied to identify significant changes
-4. Contours are detected and filtered by minimum area
-5. If motion contours exceed threshold → Alert triggered
+### CLI Mode
+```bash
+python main.py
+```
+Runs in terminal mode for headless/server environments.
 
 ---
 
-### 2. **⚙️ Configuration Tab**
+## 📖 Usage
 
-**Purpose:** Fine-tune system sensitivity and alert parameters
+### GUI Application
 
-**Settings:**
+The GUI provides 5 main tabs:
 
-#### Camera Settings
-- **Camera ID** (0-10)
-  - `0` = Built-in/Default camera
-  - `1` = External USB camera
-  - `2+` = Additional cameras or virtual cameras
-  - Default: `0`
+#### 1. **📹 Live Feed Tab**
+- Real-time video stream with motion detection
+- Motion indicators (red text + green bounding boxes)
+- Live FPS and frame statistics
+- Start/Stop Monitoring buttons
+- Manual snapshot capture
 
-#### Motion Detection Settings
-- **Sensitivity Threshold** (Range: 5-100)
-  - Controls how much pixel change triggers detection
-  - **Lower value** = More sensitive (detects subtle motion)
-  - **Higher value** = Less sensitive (only obvious motion)
-  - **Recommended values by environment**:
-    - Office/Indoor: 20-30
-    - Home Security: 15-25
-    - Warehouse: 25-40
-    - Low-light: 10-20
-  - Default: `25`
+#### 2. **⚙️ Configuration Tab**
+- **Camera ID**: Select which camera to use (0=default, 1=external)
+- **Sensitivity Threshold**: 5-100 (lower = more sensitive)
+- **Min Motion Area**: Minimum pixels to trigger alarm (100-10,000)
+- **Beep Frequency**: Customize alarm sound (100-5,000 Hz)
+- **Beep Duration**: Alarm length in milliseconds
 
-- **Min Motion Area** (Range: 100-10,000 pixels²)
-  - Minimum contour area to trigger alarm
-  - Filters out noise and small artifacts
-  - **Recommended values**:
-    - Small room: 300-500
-    - Large room: 500-1000
-    - Warehouse: 1000-2000
-  - Default: `500`
+#### 3. **🎯 ROI (Region of Interest) Tab**
+- Draw custom rectangular regions for focused detection
+- Multiple ROIs supported
+- Visual preview of selected areas
+- Save/Load ROI configurations
 
-#### Alert Settings
-- **Beep Frequency** (Range: 100-5,000 Hz)
+#### 4. **📸 Snapshots Tab**
+- View all captured motion snapshots
+- Thumbnail gallery with timestamps
+- Delete individual snapshots
+- Open snapshots in default viewer
+- Show snapshot metadata (time, size)
+
+#### 5. **📚 Documentation Tab**
+- In-app help and feature documentation
+- Configuration recommendations
+- Troubleshooting guide
+- Keyboard shortcuts
+
+### CLI Mode Features
+- Command-line operation without GUI
+- Real-time frame display in terminal window
+- Press 'q' to quit, 's' to manually save snapshot
+- Useful for remote servers and automation
+
+---
+
+## ⚙️ Configuration
+
+Edit `config.py` to customize behavior:
+
+```python
+# Camera settings
+CAMERA_ID = 0                          # 0=built-in, 1=external
+BLUR_KERNEL_SIZE = (5, 5)             # Gaussian blur kernel
+
+# Motion detection
+THRESHOLD_VALUE = 25                   # Sensitivity (5-100, lower=more sensitive)
+MIN_CONTOUR_AREA = 500                # Minimum motion area in pixels
+
+# Display
+WINDOW_NAME = "Motion Detection Alarm"
+TEXT_COLOR = (0, 0, 255)              # Red
+BOX_COLOR = (0, 255, 0)               # Green
+
+# Audio alerts
+BEEP_FREQUENCY = 1000                 # Hz
+BEEP_DURATION = 500                   # milliseconds
+
+# Storage
+SNAPSHOT_FOLDER = "snapshots"          # Where to save snapshots
+```
+
+### Recommended Settings by Environment
+
+| Environment | Threshold | Min Area |
+|------------|-----------|----------|
+| Office/Indoor | 20-30 | 300-500 |
+| Home Security | 15-25 | 300-700 |
+| Warehouse | 25-40 | 1000-2000 |
+| Low-light | 10-20 | 200-500 |
+
+---
+
+## 📂 Project Structure
+
+```
+Motion-Detection-Alarm-System/
+├── run.py                    # Entry point for GUI
+├── main.py                   # Entry point for CLI
+├── gui.py                    # PyQt5 GUI implementation
+├── motion_detector.py        # Core motion detection algorithm
+├── alarm.py                  # Audio alert functionality
+├── snapshot_manager.py       # Snapshot capture & management
+├── config.py                 # Configuration settings
+├── utils.py                  # Utility functions
+├── requirements.txt          # Python dependencies
+├── README.md                 # This file
+├── GUI_DOCUMENTATION.md      # Detailed GUI documentation
+├── SETUP_GUIDE.md           # Installation & setup guide
+└── snapshots/               # Captured motion snapshots (auto-created)
+```
+
+### Core Modules
+
+**motion_detector.py**
+- Frame-differencing algorithm
+- ROI mask support
+- Contour detection and filtering
+- Configurable sensitivity
+
+**gui.py**
+- PyQt5 main application window
+- VideoThread for background processing
+- Tab-based interface design
+- Real-time signal/slot communication
+
+**alarm.py**
+- Cross-platform audio alerts (Windows/Linux/macOS)
+- Frequency and duration control
+
+**snapshot_manager.py**
+- Automatic snapshot saving with timestamps
+- Snapshot gallery management
+- File organization
+
+**utils.py**
+- Frame preprocessing (grayscale, blur)
+- Image utility functions
+- Shared helper methods
+
+---
+
+## 🎯 ROI (Region of Interest) Features
+
+Focus motion detection on specific areas:
+
+1. Open **ROI Tab** in GUI
+2. Click **Draw ROI** to start
+3. Click and drag to create rectangular region
+4. Add multiple ROIs for complex monitoring scenarios
+5. Click **Save ROI** to persist configuration
+6. Motion detection only triggers within selected regions
+
+Benefits:
+- Eliminate false positives from irrelevant areas
+- Reduce CPU usage
+- Improve detection accuracy
+- Monitor multiple zones independently
+
+---
+
+## 🔧 Troubleshooting
+
+### Camera Not Opening
+- Check `CAMERA_ID` in config.py (try 0, 1, or -1)
+- Verify camera permissions (Linux may need `chmod`)
+- Restart the application
+- Test camera with other applications first
+
+### Motion Not Detected
+- Lower `THRESHOLD_VALUE` in Configuration tab (increase sensitivity)
+- Reduce `MIN_CONTOUR_AREA` for smaller movements
+- Check lighting conditions
+- Ensure camera has clear view of motion area
+- Review ROI settings if using regions
+
+### Too Many False Positives
+- Increase `THRESHOLD_VALUE` (decrease sensitivity)
+- Increase `MIN_CONTOUR_AREA` to filter noise
+- Improve lighting to reduce noise
+- Avoid pointing camera at reflective surfaces
+- Use ROI to exclude problem areas
+
+### No Audio Alerts
+- **Windows**: Verify system volume is on
+- **Linux/macOS**: Check audio device is available
+- Modify `BEEP_FREQUENCY` and `BEEP_DURATION` in config.py
+- Ensure PyAudio is properly installed (if using custom audio)
+
+### Snapshots Not Saving
+- Verify `snapshots` folder exists and is writable
+- Check disk space availability
+- Review file permissions on snapshot folder
+- Check `SNAPSHOT_FOLDER` path in config.py
+
+### Performance Issues (Low FPS)
+- Reduce camera resolution in config settings
+- Increase blur kernel size for faster processing
+- Reduce monitor window size
+- Close other CPU-intensive applications
+- Use CLI mode instead of GUI
+
+---
+
+## 📦 Dependencies
+
+All dependencies are in `requirements.txt`:
+```
+opencv-python==4.8.1.78    # Computer vision
+numpy==1.24.3              # Numerical computing
+PyQt5==5.15.9              # GUI framework
+Pillow==10.0.0             # Image processing
+```
+
+---
+
+## 💡 Performance Tips
+
+1. **Use ROI selection** to limit detection area
+2. **Adjust blur kernel size** in config for faster processing
+3. **Increase MIN_CONTOUR_AREA** to skip small movements
+4. **Disable GUI updates** in CLI mode for server use
+5. **Use CLI mode** instead of GUI for headless systems
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to:
+- Report bugs and issues
+- Suggest new features
+- Submit pull requests
+- Improve documentation
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License - see LICENSE file for details.
+
+---
+
+## 📧 Support
+
+For issues, questions, or suggestions, please open an issue on GitHub.
+
+---
+
+## 🎬 Example Use Cases
+
+- **Home Security**: Monitor entry points for intrusions
+- **Warehouse Monitoring**: Track movement in storage areas
+- **Office Surveillance**: Detect after-hours activity
+- **Pet Monitoring**: Watch pets while away
+- **Construction Site**: Monitor job sites 24/7
+- **Lab Automation**: Trigger actions on motion events
+
+---
+
+**Last Updated**: June 2026
+**Author**: Ramesha Akram
+**Repository**: https://github.com/RameeshaAkram/Motion-Detection-Alarm-System-
   - Audio pitch of alert sound
   - 1000 Hz = Default beep tone
   - Higher = Higher pitched sound
