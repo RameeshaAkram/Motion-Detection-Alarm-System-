@@ -3,7 +3,6 @@ venv/
 __pycache__/
 *.pyc
 *.mb
-!readme.mb
 snapshots/
 .idea/
 .vscode/
