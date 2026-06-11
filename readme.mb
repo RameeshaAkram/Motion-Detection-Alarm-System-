@@ -1,0 +1,235 @@
+# Motion Detection Alarm System - Project Overview
+
+## Project Summary
+A comprehensive Python-based motion detection and alarm system with professional GUI, ROI support, real-time monitoring, snapshot capture, and configurable alerts.
+
+## Key Features
+- **Frame-Differencing Algorithm**: Advanced motion detection using frame comparison
+- **PyQt5 GUI**: Professional 5-tab interface with live monitoring
+- **ROI Support**: Define custom regions for focused detection
+- **Automatic Snapshots**: Save motion-triggered images with timestamps
+- **Audio Alerts**: Customizable beep notifications
+- **Cross-Platform**: Windows, macOS, Linux compatible
+- **CLI & GUI Modes**: Flexibility for different use cases
+
+## Core Architecture
+
+### Main Components
+1. **gui.py** - PyQt5 GUI with VideoThread for background processing
+   - Live Feed Tab: Real-time video with motion indicators
+   - Configuration Tab: Sensitivity and alert settings
+   - ROI Tab: Region of Interest drawing and management
+   - Snapshots Tab: Gallery and management of captured images
+   - Documentation Tab: In-app help system
+
+2. **motion_detector.py** - Core detection algorithm
+   - Frame-differencing technique
+   - Grayscale conversion and blur preprocessing
+   - Threshold-based motion identification
+   - Contour detection and filtering
+   - ROI mask support
+
+3. **alarm.py** - Audio alert system
+   - Cross-platform beep support (Windows/Linux/macOS)
+   - Configurable frequency and duration
+   - Fallback methods for different systems
+
+4. **snapshot_manager.py** - Snapshot handling
+   - Automatic timestamp-based file naming
+   - Directory management
+   - Snapshot counting and retrieval
+
+5. **config.py** - Centralized configuration
+   - Camera settings
+   - Motion detection thresholds
+   - Alert parameters
+   - Display options
+   - Storage paths
+
+## Technology Stack
+- **Python 3.7+**
+- **OpenCV 4.8.1** - Computer vision and frame processing
+- **PyQt5 5.15.9** - GUI framework
+- **NumPy 1.24.3** - Numerical operations
+- **Pillow 10.0.0** - Image processing
+
+## Configuration Variables
+
+### Motion Detection
+- `THRESHOLD_VALUE`: Controls detection sensitivity (5-100)
+  - Lower = More sensitive
+  - Higher = Less sensitive
+  - Recommended: 15-30 for typical use
+
+- `MIN_CONTOUR_AREA`: Minimum pixel area to trigger alarm (100-10,000)
+  - Filters out noise and small movements
+  - Recommended: 300-1000 for typical rooms
+
+- `BLUR_KERNEL_SIZE`: Gaussian blur kernel for preprocessing
+  - Reduces noise while preserving motion edges
+  - Default: (5, 5)
+
+### Audio Alerts
+- `BEEP_FREQUENCY`: Alarm sound frequency in Hz (100-5,000)
+  - Default: 1000 Hz (standard beep)
+  
+- `BEEP_DURATION`: Alarm duration in milliseconds
+  - Default: 500 ms
+
+### Camera & Display
+- `CAMERA_ID`: Camera selection (0=default, 1=external, etc.)
+- `WINDOW_NAME`: Display window title
+- `TEXT_COLOR`: Alert text color (BGR format)
+- `BOX_COLOR`: Motion box outline color
+
+### Storage
+- `SNAPSHOT_FOLDER`: Directory for saving snapshots
+- Default: "snapshots/" (auto-created)
+
+## Motion Detection Algorithm Flow
+
+1. **Frame Capture**: Get current frame from camera
+2. **Preprocessing**: Convert to grayscale, apply Gaussian blur
+3. **Frame Differencing**: Calculate absolute difference with previous frame
+4. **Thresholding**: Apply binary threshold to identify changes
+5. **Morphological Operations**: Dilate to connect nearby regions
+6. **Contour Detection**: Find and extract motion contours
+7. **Area Filtering**: Keep only contours exceeding MIN_CONTOUR_AREA
+8. **ROI Masking**: If ROI defined, mask results to selected region
+9. **Alert Triggering**: If motion detected, sound alarm and save snapshot
+
+## Entry Points
+
+### GUI Mode
+```bash
+python run.py
+```
+- Launches PyQt5 application
+- Best for interactive use
+- Full feature access
+
+### CLI Mode
+```bash
+python main.py
+```
+- Terminal-based operation
+- Suitable for servers
+- Lower resource overhead
+
+## File Organization
+```
+Project Root/
+├── Core Modules
+│   ├── motion_detector.py      (Detection algorithm)
+│   ├── gui.py                  (GUI implementation)
+│   ├── alarm.py                (Audio alerts)
+│   ├── snapshot_manager.py     (Snapshot handling)
+│   ├── utils.py                (Helper functions)
+│   └── config.py               (Configuration)
+│
+├── Entry Points
+│   ├── run.py                  (GUI launcher)
+│   └── main.py                 (CLI launcher)
+│
+├── Documentation
+│   ├── README.md               (User guide)
+│   ├── GUI_DOCUMENTATION.md    (GUI details)
+│   ├── SETUP_GUIDE.md         (Setup instructions)
+│   └── readme.mb              (Project overview - this file)
+│
+├── Dependencies
+│   └── requirements.txt        (Python packages)
+│
+└── Runtime Files
+    └── snapshots/             (Auto-created snapshot folder)
+```
+
+## Performance Considerations
+
+### CPU Usage Optimization
+- ROI selection reduces analysis area
+- Increased blur kernel size speeds up processing
+- Higher MIN_CONTOUR_AREA reduces contour calculations
+- CLI mode has lower overhead than GUI
+
+### Memory Usage
+- Default frame size from camera
+- Snapshot storage in file system
+- Keep snapshots folder cleaned periodically
+
+### Recommended Settings by Use Case
+
+#### Office/Indoor
+- Threshold: 20-30
+- Min Area: 300-500 pixels
+- Good lighting recommended
+
+#### Home Security
+- Threshold: 15-25
+- Min Area: 300-700 pixels
+- Works day and night
+
+#### Warehouse
+- Threshold: 25-40
+- Min Area: 1000-2000 pixels
+- Large areas require larger thresholds
+
+#### Low-Light Environments
+- Threshold: 10-20
+- Min Area: 200-500 pixels
+- May need IR camera for 24/7 operation
+
+## Common Issues & Solutions
+
+### Camera Detection
+- Verify camera permissions (especially on Linux)
+- Try different CAMERA_ID values (0, 1, -1)
+- Test camera with other applications first
+
+### False Positives
+- Increase THRESHOLD_VALUE
+- Increase MIN_CONTOUR_AREA
+- Use ROI to exclude problematic areas
+- Improve lighting to reduce noise
+
+### Motion Not Detected
+- Decrease THRESHOLD_VALUE
+- Decrease MIN_CONTOUR_AREA
+- Ensure adequate lighting
+- Check camera field of view
+
+### Performance Issues
+- Use CLI mode instead of GUI
+- Apply ROI selection
+- Reduce camera resolution
+- Close other applications
+
+## Future Enhancement Ideas
+- Multi-camera support
+- Machine learning-based detection
+- Cloud storage integration
+- Mobile app notifications
+- Advanced ROI shapes (polygons)
+- Motion heatmap visualization
+- Event logging database
+- Scheduled monitoring
+
+## Project Metadata
+- **Version**: 1.0
+- **Created**: 2026
+- **Python Requirement**: 3.7+
+- **Platform**: Windows, macOS, Linux
+- **License**: MIT
+- **Author**: Ramesha Akram
+- **Repository**: https://github.com/RameeshaAkram/Motion-Detection-Alarm-System-
+
+## Development Notes
+- Frame-differencing is simple but effective for motion detection
+- PyQt5 threading prevents GUI freezing during video processing
+- Snapshot storage uses filesystem for simplicity
+- Configuration via config.py allows easy customization
+- Cross-platform audio via fallback methods
+- ROI feature enables flexible deployment scenarios
+
+---
+**Note**: This readme.mb file serves as a technical reference document for developers and advanced users. Refer to README.md for general usage information.
