@@ -303,18 +303,6 @@ Contributions are welcome! Feel free to:
 
 ---
 
-## 📝 License
-
-This project is licensed under the MIT License - see LICENSE file for details.
-
----
-
-## 📧 Support
-
-For issues, questions, or suggestions, please open an issue on GitHub.
-
----
-
 ## 🎬 Example Use Cases
 
 - **Home Security**: Monitor entry points for intrusions
@@ -360,16 +348,6 @@ A: Yes! If your IP camera supports RTSP, you can use RTSP URL instead of camera 
 
 ---
 
-## 📋 Version & License
-
-- **Version**: 1.0
-- **Python**: 3.7+
-- **License**: MIT
-- **Author**: Ramesha Akram
-- **Last Updated**: June 2026
-- **Repository**: https://github.com/RameeshaAkram/Motion-Detection-Alarm-System-
-
----
 
 ## 🚀 Next Steps
 
@@ -381,4 +359,3 @@ A: Yes! If your IP camera supports RTSP, you can use RTSP URL instead of camera 
 
 ---
 
-**For detailed GUI documentation, refer to `GUI_DOCUMENTATION.md` and `SETUP_GUIDE.md`**
